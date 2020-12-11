@@ -7,12 +7,6 @@ SDL_Renderer* renderer;
 eof
 )
 
-(c-define-type SDL_Renderer "SDL_Renderer")
-(c-define-type SDL_Renderer* (pointer SDL_Renderer))
-
-(c-define-type SDL_Window "SDL_Window")
-(c-define-type SDL_Window* (pointer SDL_Window))
-
 (define init-system
 	(c-lambda
 		(nonnull-char-string int32 int32)
@@ -35,6 +29,7 @@ eof
 #<<eof
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
+		___return;
 eof
 ))
 
