@@ -1,22 +1,57 @@
 (c-declare #<<eof
 #include <SDL2/SDL.h>
+
+SDL_Window* window;
+SDL_Renderer* renderer;
+
 eof
 )
+
+(c-define-type SDL_Renderer "SDL_Renderer")
+(c-define-type SDL_Renderer* (pointer SDL_Renderer))
 
 (c-define-type SDL_Window "SDL_Window")
 (c-define-type SDL_Window* (pointer SDL_Window))
 
-(define create-window 
-    (c-lambda 
-        (nonnull-char-string int32 int32 int32 int32 unsigned-int32)
-        SDL_Window*
-        "SDL_CreateWindow"))
+(define init-system
+	(c-lambda
+		(nonnull-char-string int32 int32)
+		int32
+#<<eof
+	if ((window = SDL_CreateWindow(___arg1, 0, 0, ___arg2, ___arg3, 0)) == NULL) {
+		___return(3);
+	}
+	if ((renderer = SDL_CreateRenderer(window, -1, 0)) == NULL) {
+		___return(3);
+	}
+	___return(0);
+eof
+))
 
+(define clear-scr
+	(c-lambda
+		()
+		void
+#<<eof
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		SDL_RenderClear(renderer);
+eof
+))
+
+(define refresh-scr
+	(c-lambda
+		()
+		void
+		"SDL_RenderPresent(renderer);"))
 
 (define sleep
     (c-lambda (unsigned-int32) void "SDL_Delay"))
 
-(create-window "Hello" 0 0 64 64 0)
+(define scr-w 320)
+(define scr-h 240)
 
-(sleep 5000)
-(print "Hello")
+(if (= (init-system "Hello" scr-w scr-h) 0)
+	(begin
+		(clear-scr)
+		(refresh-scr)
+		(sleep 2000)))
