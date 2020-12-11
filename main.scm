@@ -1,9 +1,9 @@
-(c-declare #<<eof
-#include <SDL2/SDL.h>
+(c-declare 
+#<<eof
+    #include <SDL2/SDL.h>
 
-SDL_Window* window;
-SDL_Renderer* renderer;
-
+    SDL_Window* window;
+    SDL_Renderer* renderer;
 eof
 )
 
@@ -22,31 +22,51 @@ eof
 eof
 ))
 
-(define clear-scr
+(define stop-system
+    (c-lambda
+        ()
+        void
+#<<eof
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    ___return;    
+eof
+))
+
+(define clear-screen
 	(c-lambda
 		()
 		void
 #<<eof
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
-		___return;
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	___return;
 eof
 ))
 
-(define refresh-scr
+(define refresh-screen
 	(c-lambda
 		()
 		void
-		"SDL_RenderPresent(renderer);"))
+#<<eof
+    SDL_RenderPresent(renderer);
+    ___return;		
+eof
+))
+
+(define get-ticks
+    (c-lambda () unsigned-int32 "SDL_GetTicks"))
 
 (define sleep
     (c-lambda (unsigned-int32) void "SDL_Delay"))
 
-(define scr-w 320)
-(define scr-h 240)
+(define screen-w 320)
+(define screen-h 240)
 
-(if (= (init-system "Hello" scr-w scr-h) 0)
+(if (zero? (init-system "Hello" screen-w screen-h))
 	(begin
-		(clear-scr)
-		(refresh-scr)
-		(sleep 2000)))
+		(clear-screen)
+		(refresh-screen)
+		(sleep 2000)
+        (stop-system)))
