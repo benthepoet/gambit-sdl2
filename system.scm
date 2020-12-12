@@ -4,6 +4,7 @@
 
     SDL_Window* window;
     SDL_Renderer* renderer;
+    SDL_Texture* tileset;
 eof
 )
 
@@ -52,6 +53,40 @@ eof
 #<<eof
     SDL_RenderPresent(renderer);
     ___return;		
+eof
+))
+
+(define load-tileset
+    (c-lambda
+        (nonnull-char-string)
+        void
+#<<eof
+    SDL_Surface* surface = SDL_LoadBMP(___arg1);
+    tileset = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    ___return;
+eof
+))
+
+(define put-tile
+    (c-lambda
+        (int8 int8 int8 int8)
+        void
+#<<eof
+    SDL_Rect src;
+    src.x = ___arg1 * 8;
+    src.y = ___arg2 * 8;
+    src.w = 8;
+    src.h = 8;
+
+    SDL_Rect dest;
+    dest.x = ___arg3;
+    dest.y = ___arg4;
+    dest.w = 8;
+    dest.h = 8;
+
+    SDL_RenderCopy(renderer, tileset, &src, &dest);
+    ___return;
 eof
 ))
 
