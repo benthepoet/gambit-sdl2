@@ -13,7 +13,9 @@ eof
 		(nonnull-char-string int32 int32)
 		int32
 #<<eof
-	if ((window = SDL_CreateWindow(___arg1, 0, 0, ___arg2, ___arg3, 0)) == NULL) {
+    SDL_Init(SDL_INIT_VIDEO);
+
+	if ((window = SDL_CreateWindow(___arg1, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ___arg2, ___arg3, 0)) == NULL) {
 		___return(3);
 	}
 	if ((renderer = SDL_CreateRenderer(window, -1, 0)) == NULL) {
@@ -73,17 +75,19 @@ eof
         (int8 int8 int8 int8)
         void
 #<<eof
+    byte s = 8;
+
     SDL_Rect src;
-    src.x = ___arg1 * 8;
-    src.y = ___arg2 * 8;
-    src.w = 8;
-    src.h = 8;
+    src.x = ___arg1 * s;
+    src.y = ___arg2 * s;
+    src.w = s;
+    src.h = s;
 
     SDL_Rect dest;
     dest.x = ___arg3;
     dest.y = ___arg4;
-    dest.w = 8;
-    dest.h = 8;
+    dest.w = s;
+    dest.h = s;
 
     SDL_RenderCopy(renderer, tileset, &src, &dest);
     ___return;

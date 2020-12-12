@@ -3,13 +3,23 @@
 (define screen-w 320)
 (define screen-h 240)
 
-(define tileset "tileset.bmp")
+(define tileset "../assets/tileset.bmp")
 
-(if (zero? (init-system "Hello" screen-w screen-h))
+(define put-sprite
+	(lambda
+		(x y tiles)
+		(let ((i x))
+			(vector-for-each
+				(lambda (t)
+					(put-tile (car t) (cdr t) i y)
+					(set! i (+ i 8))) 
+				tiles))))
+
+(if (zero? (init-system "Demo" screen-w screen-h))
 	(begin
 		(load-tileset tileset)
 		(clear-screen)
-		(put-tile 0 0 0 0)
+		(put-sprite 64 64 '#((0 . 0) (0 . 0)))
 		(refresh-screen)
 		(sleep 2000)
         (stop-system)))
