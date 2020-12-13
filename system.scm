@@ -10,17 +10,20 @@ eof
 
 (define init-system
 	(c-lambda
-		(nonnull-char-string int32 int32)
+		(nonnull-char-string int32 int32 int32)
 		int32
 #<<eof
     SDL_Init(SDL_INIT_VIDEO);
 
-	if ((window = SDL_CreateWindow(___arg1, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ___arg2, ___arg3, 0)) == NULL) {
+	if ((window = SDL_CreateWindow(___arg1, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ___arg2 * ___arg4, ___arg3 * ___arg4, 0)) == NULL) {
 		___return(3);
 	}
 	if ((renderer = SDL_CreateRenderer(window, -1, 0)) == NULL) {
 		___return(3);
 	}
+
+    SDL_RenderSetLogicalSize(renderer, ___arg2, ___arg3);
+
 	___return(0);
 eof
 ))
@@ -72,20 +75,21 @@ eof
 
 (define put-tile
     (c-lambda
-        (int8 int8 int8 int8)
+        (int8 int8 int8)
         void
 #<<eof
     byte s = 8;
+    byte k = 16;
 
     SDL_Rect src;
-    src.x = ___arg1 * s;
-    src.y = ___arg2 * s;
+    src.x = (___arg1 % k) * s;
+    src.y = (___arg1 / k) * s;
     src.w = s;
     src.h = s;
 
     SDL_Rect dest;
-    dest.x = ___arg3;
-    dest.y = ___arg4;
+    dest.x = ___arg2;
+    dest.y = ___arg3;
     dest.w = s;
     dest.h = s;
 
