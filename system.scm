@@ -78,8 +78,8 @@ eof
         (int8 int8 int8)
         void
 #<<eof
-    byte s = 8;
-    byte k = 16;
+    char s = 8;
+    char k = 16;
 
     SDL_Rect src;
     src.x = (___arg1 % k) * s;
