@@ -10,22 +10,22 @@ eof
 )
 
 (define init-system
-	(c-lambda
-		(nonnull-char-string int32 int32 int32)
-		int32
+    (c-lambda
+        (nonnull-char-string int32 int32 int32)
+        int32
 #<<eof
     SDL_Init(SDL_INIT_VIDEO);
 
-	if ((window = SDL_CreateWindow(___arg1, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ___arg2 * ___arg4, ___arg3 * ___arg4, 0)) == NULL) {
-		___return(3);
-	}
-	if ((renderer = SDL_CreateRenderer(window, -1, 0)) == NULL) {
-		___return(3);
-	}
+    if ((window = SDL_CreateWindow(___arg1, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ___arg2 * ___arg4, ___arg3 * ___arg4, 0)) == NULL) {
+        ___return(3);
+    }
+    if ((renderer = SDL_CreateRenderer(window, -1, 0)) == NULL) {
+        ___return(3);
+    }
 
     SDL_RenderSetLogicalSize(renderer, ___arg2, ___arg3);
 
-	___return(0);
+    ___return(0);
 eof
 ))
 
@@ -42,20 +42,20 @@ eof
 ))
 
 (define clear-screen
-	(c-lambda
-		()
-		void
+    (c-lambda
+        ()
+        void
 #<<eof
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-	___return;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    ___return;
 eof
 ))
 
 (define refresh-screen
-	(c-lambda
-		()
-		void
+    (c-lambda
+        ()
+        void
 #<<eof
     SDL_RenderPresent(renderer);
     ___return;		
