@@ -110,5 +110,11 @@ eof
 #<<eof
     ___return(SDL_PollEvent(&event));
 eof
-    )
-)
+))
+
+(define event-type
+    (c-lambda () unsigned-int32
+#<<eof
+    ___return(event.type);
+eof
+))
