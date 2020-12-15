@@ -5,6 +5,7 @@
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* tileset;
+    SDL_Event event;
 eof
 )
 
@@ -103,3 +104,11 @@ eof
 
 (define sleep
     (c-lambda (unsigned-int32) void "SDL_Delay"))
+
+(define poll-event
+    (c-lambda () bool
+#<<eof
+    ___return(SDL_PollEvent(&event));
+eof
+    )
+)

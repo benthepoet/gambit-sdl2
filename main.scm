@@ -1,4 +1,5 @@
 (include "system.scm")
+(include "util.scm")
 
 (define screen-w 320)
 (define screen-h 240)
@@ -10,9 +11,9 @@
 	(lambda
 		(x y rows)
 		(let ((i x) (j y))
-			(vector-for-each
+			(vec-each
 				(lambda (row)
-					(vector-for-each
+					(vec-each
 						(lambda (tile)
 							(put-tile tile i j)
 							(set! i (+ i 8))) 
@@ -26,8 +27,11 @@
 (if (zero? (init-system "Demo" screen-w screen-h screen-scale))
 	(begin
 		(load-tileset tileset)
-		(clear-screen)
-		(put-sprite 64 64 #(#(0 1 16) #(17 2 18)))
-		(refresh-screen)
-		(sleep 2000)
+		(let loop ()
+            (clear-screen)
+		    (put-sprite 64 64 '#(#(0 1 16) #(17 2 18)))
+		    (refresh-screen)
+            (sleep 1000)
+            (loop)
+		)
         (stop-system)))
