@@ -1,5 +1,6 @@
 (include "system.scm")
 (include "util.scm")
+(include "block.scm")
 
 (define +screen-w+ 320)
 (define +screen-h+ 240)
@@ -25,6 +26,13 @@
                 rows
             ))))
 
+(define root (make-block 
+    (make-state (list '(64 64 #(#(0 1 16) #(17 2 18)))))
+    (lambda (state)
+        (for-each 
+            (lambda (s) (apply put-sprite s)) 
+            (state-sprites state)))))
+
 (if (zero? (init-system "Demo" +screen-w+ +screen-h+ +screen-scale+))
     (begin
         (load-tileset tileset)
@@ -34,7 +42,9 @@
                 (set! next-tick (+ (get-ticks) +skip-ticks+))
 
                 (clear-screen)
-                (put-sprite 64 64 '#(#(0 1 16) #(17 2 18)))
+                (let ((on-draw (block-on-draw root))
+                      (state (block-state root)))
+                    (on-draw state))
                 (refresh-screen)
 
                 (let event-loop ()
