@@ -12,7 +12,8 @@
 (define tileset "../assets/tileset.bmp")
 
 (define draw-tilemap
-    (lambda (tilemap) #f))
+    (lambda (tilemap) 
+        (put-sprite 0 0 tilemap)))
 
 (define draw-sprites
     (lambda (sprites)
@@ -22,7 +23,7 @@
 
 (define root (make-block 
     (make-state
-        '#() 
+        '#(#(0 1 0 1 0 1 0)) 
         (list '(64 64 #(#(0 1 16) #(17 2 18)))))
     (lambda (state)
         (let ((tilemap (state-tilemap state))
