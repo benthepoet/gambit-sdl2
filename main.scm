@@ -1,5 +1,6 @@
-(include "system.scm")
 (include "util.scm")
+(include "system.scm")
+(include "sprite.scm")
 (include "block.scm")
 
 (define +screen-w+ 320)
@@ -10,28 +11,24 @@
 
 (define tileset "../assets/tileset.bmp")
 
-(define put-sprite
-    (lambda
-        (x y rows)
-        (let ((i x) (j y))
-            (vec-each
-                (lambda (row)
-                    (vec-each
-                        (lambda (tile)
-                            (put-tile tile i j)
-                            (set! i (+ i 8))) 
-                        row)
-                    (set! i x)
-                    (set! j (+ j 8)))
-                rows
-            ))))
+(define draw-tilemap
+    (lambda (tilemap) #f))
 
-(define root (make-block 
-    (make-state (list '(64 64 #(#(0 1 16) #(17 2 18)))))
-    (lambda (state)
+(define draw-sprites
+    (lambda (sprites)
         (for-each 
             (lambda (s) (apply put-sprite s)) 
-            (state-sprites state)))))
+            sprites)))
+
+(define root (make-block 
+    (make-state
+        '#() 
+        (list '(64 64 #(#(0 1 16) #(17 2 18)))))
+    (lambda (state)
+        (let ((tilemap (state-tilemap state))
+              (sprites (state-sprites state)))
+            (draw-tilemap tilemap)
+            (draw-sprites sprites)))))
 
 (if (zero? (init-system "Demo" +screen-w+ +screen-h+ +screen-scale+))
     (begin
