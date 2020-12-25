@@ -9,8 +9,6 @@
 (define +ticks-per-second+ 30)
 (define +skip-ticks+ (truncate (/ 1000 +ticks-per-second+)))
 
-(define tileset "../assets/tileset.bmp")
-
 (define draw-tilemap
     (lambda (tilemap) 
         (put-sprite 0 0 tilemap)))
@@ -23,6 +21,7 @@
 
 (define root (make-block 
     (make-state
+        "../assets/tileset.bmp"
         '#(#(0 1 0 1 0 1 0)) 
         (list '(64 64 #(#(0 1 16) #(17 2 18)))))
     (lambda (state)
@@ -33,7 +32,7 @@
 
 (if (zero? (init-system "Demo" +screen-w+ +screen-h+ +screen-scale+))
     (begin
-        (load-tileset tileset)
+        (load-tileset (state-tileset (block-state root)))
         (let ((run #t) 
               (next-tick 0))
             (let main-loop ()
